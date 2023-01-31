@@ -1,0 +1,9 @@
+Id,Start (s),End (s),Scientific name,Common name,Confidence
+0,957,960,Troglodytes troglodytes,Zaunkönig,0.9117
+1,1710,1713,Troglodytes troglodytes,Zaunkönig,0.912
+2,2673,2676,Turdus philomelos,Singdrossel,0.929
+3,2676,2679,Turdus philomelos,Singdrossel,0.966
+4,4248,4251,Poecile palustris,Sumpfmeise,0.9582
+5,4455,4458,Turdus merula,Amsel,0.9164
+6,5436,5439,Cyanistes caeruleus,Blaumeise,0.9288
+7,7038,7041,Turdus merula,Amsel,0.9174
