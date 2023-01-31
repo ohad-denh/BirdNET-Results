@@ -1,13 +1,14 @@
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
+import { Row } from '../types/row';
 
 interface ResultsTableProps {
   file: File | null;
 }
 
 // Id function
-const getRowId = (row: any) => {
+const getRowId = (row: Row) => {
   return `${row["Start (s)"]?.toString()}_${row["End (s)"]?.toString()}_${row["Scientific name"]}`;
 };
 
@@ -39,7 +40,7 @@ function ResultsTable({ file }: ResultsTableProps) {
       Papa.parse(e.target?.result as string, {
         header: true,
         complete: (results) => {
-          const data = results.data.map((row: any) => {
+          const data = results.data.map((row: Row) => {
             const id = `${row["Start (s)"]}_${row["End (s)"]}_${row["Scientific name"]}`;
             return { ...row, Id: id };
           });
