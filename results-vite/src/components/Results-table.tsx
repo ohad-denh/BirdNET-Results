@@ -40,7 +40,7 @@ function ResultsTable({ file }: ResultsTableProps) {
       Papa.parse(e.target?.result as string, {
         header: true,
         complete: (results) => {
-          const data = results.data.map((row) => {
+          const data = results.data.map((row: any) => {
             const id = `${row["Start (s)"]}_${row["End (s)"]}_${row["Scientific name"]}`;
             return { ...row, Id: id };
           });
