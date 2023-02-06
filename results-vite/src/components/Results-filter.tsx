@@ -7,7 +7,7 @@ interface FilterProps {
     onFilterChange: (column: string, allRows: string[]) => void;
 }
 
-function Filter({ allRows }: FilterProps) {
+function ResultsFilter(filter: FilterProps) {
   const [selected, setSelected] = useState<string[]>([]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,12 +19,14 @@ function Filter({ allRows }: FilterProps) {
     }
   };
 
-  const uniqueNames = Array.from(new Set(allRows.map((row: Row) => row['Common name'])));
+  console.log(filter.allRows);
+
+  const uniqueNames = Array.from(new Set(filter.allRows.map((row: any) => row[filter.column])));
 
   return (
     <div>
       {uniqueNames.map((name) => (
-        <div key={name}>
+        <div className={'padding'} key={name}>
           <input type="checkbox" value={name} onChange={handleCheckboxChange} />
           {name}
         </div>
@@ -32,3 +34,5 @@ function Filter({ allRows }: FilterProps) {
     </div>
   );
 }
+
+export default ResultsFilter

@@ -2,6 +2,7 @@ import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from '@
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
 import { Row } from '../types/row';
+import ResultsFilter from './Results-filter';
 
 interface ResultsTableProps {
   file: File | null;
@@ -9,17 +10,16 @@ interface ResultsTableProps {
 
 // Id function
 const getRowId = (row: Row) => {
-  return `${row["Start (s)"]?.toString()}_${row["End (s)"]?.toString()}_${row["Scientific name"]}`;
+  return `${row['start']?.toString()}_${row['end']?.toString()}_${row['scientific']?.toString()}`;
 };
 
 // Declare the columns variable outside of the fetch function
 const columns: GridColDef[] = [
-  { field: 'Id', width: 110},
-  { field: 'Start (s)', type: 'number', width: 70 },
-  { field: 'End (s)', type: 'number', width: 70 },
-  { field: 'Scientific name', width: 200 },
-  { field: 'Common name', width: 130 },
-  { field: 'Confidence', type: 'number', width: 140},
+  { field: 'start', headerName: 'Start (s)', type: 'number', width: 65 },
+  { field: 'end', headerName: 'Ende (s)', type: 'number', width: 65 },
+  { field: 'scientific', headerName: 'Art (wiss.)', width: 190 },
+  { field: 'common', headerName: 'Art (ugs.)', width: 140 },
+  { field: 'confidence', headerName: 'Wahrscheinlichkeit', type: 'number', width: 140},
 ];
 
 function CustomToolbar() {
@@ -40,11 +40,17 @@ function ResultsTable({ file }: ResultsTableProps) {
       Papa.parse(e.target?.result as string, {
         header: true,
         complete: (results) => {
-          const data = results.data.map((row: any) => {
-            const id = `${row["Start (s)"]}_${row["End (s)"]}_${row["Scientific name"]}`;
-            return { ...row, Id: id };
+          const sanitizedData = results.data.map((row: any) => {
+            return {
+              start: row['Start (s)'],
+              end: row['End (s)'],
+              scientific: row['Scientific name'],
+              common: row['Common name'],
+              confidence: row['Confidence'],
+            };
           });
-          setRows(data);
+          
+          setRows(sanitizedData);
         }
       });
     };
@@ -52,17 +58,29 @@ function ResultsTable({ file }: ResultsTableProps) {
   }, [file]);
 
   return (
-      <div style={{ height: 600, width: '65%', margin: 'auto' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowId={getRowId}
-            checkboxSelection
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-            />
+    <div className={'results'}>
+      <div className={'results-table height-70 width-70'}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={getRowId}
+        checkboxSelection
+        components={{
+          Toolbar: CustomToolbar,
+        }}
+      />
       </div>
+      <div className={'results-filter height-70 width-30'}>
+      <ResultsFilter
+        column={'common'}
+        allRows={rows}
+        onFilterChange={function (column: string, allRows: string[]): void {
+          throw new Error('Function not implemented.');
+          }
+        }
+      />
+      </div>
+    </div>
   );
 }
 
